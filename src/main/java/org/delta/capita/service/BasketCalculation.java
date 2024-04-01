@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+
 public class BasketCalculation {
 
     public BigDecimal calculate_total_cost_item(List<BasketEnum> basketEnums){
@@ -23,8 +24,11 @@ public class BasketCalculation {
                 }else {
                     offerItemMap.put(item,1);
                 }
+                return 0.0;
+            }else {
+                return item.getPaisa();
             }
-            return item.getPaisa();
+
         }).reduce(0.0, Double::sum);
 
       var totalCostOfOfferItem =   offerItemMap.entrySet().stream().map(offerItem -> {
@@ -34,7 +38,8 @@ public class BasketCalculation {
             }
 
             if(offerItem.getKey().getOffer().equals("THREE_FOR_PRICE_OF_TWO")) {
-               var offer =  offerItem.getValue() % 3 == 0 ? (offerItem.getValue() / 3) * 2 : ((offerItem.getValue() / 3) * 2) + offerItem.getValue() % 3;
+               var offer =  offerItem.getValue() < 3 ? offerItem.getValue() :
+                       offerItem.getValue() % 3 == 0 ? (offerItem.getValue() / 3) * 2 : ((offerItem.getValue() / 3) * 2) + offerItem.getValue() % 3;
                 return offerItem.getKey().getPaisa() * offer;
             }
             return 0.0;
